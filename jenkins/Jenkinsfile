@@ -47,10 +47,12 @@ pipeline {
         }
 
         stage('JIRA') {
+            steps {
                withEnv(['JIRA_SITE=resolve']) {
                 def comment = [ body: 'test comment' ]
                 jiraAddComment idOrKey: 'AUTO-3', input: comment
               }
+            }
         }
     }
 
