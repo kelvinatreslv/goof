@@ -46,14 +46,34 @@ pipeline {
           }
         }
 
-        stage('upload report to Jira') {
+        stage('add comment to Jira') {
             steps {
+               echo "${JIRA_ISSUE_KEY}"
                echo 'uploading report to Jira...'
                sh 'ls -l | grep sarif'
+
+               comment_issues()
             }
         }
 
 
+
+
+
+void comment_issues() {
+    def issue_pattern = "AUTO-\\d+"
+
+    // Find all relevant commit ids
+    currentBuild.changeSets.each {changeSet ->
+        changeSet.each { commit ->
+            String msg = commit.getMsg()
+            msg.findAll(issue_pattern).each {
+                // Actually post a comment
+                id -> jiraAddComment idOrKey: id, comment: 'Hi there!'
+            }
+        }
+    }
+}
 
         // stage('Build') {
         //     steps {
