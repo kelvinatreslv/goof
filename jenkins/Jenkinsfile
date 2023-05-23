@@ -47,15 +47,10 @@ pipeline {
         }
 
         stage('JIRA') {
-            steps {
-               echo "${JIRA_ISSUE_KEY}"
-               echo 'add comment to Jira...'
-               sh 'ls -l | grep sarif'
                withEnv(['JIRA_SITE=resolve']) {
                 def comment = [ body: 'test comment' ]
                 jiraAddComment idOrKey: 'AUTO-3', input: comment
-                }
-            }
+              }
         }
     }
 
