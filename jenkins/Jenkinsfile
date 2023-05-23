@@ -1,8 +1,27 @@
 pipeline {
     agent any
     tools {nodejs "nodejs-20.2.0"}
-    stages {
 
+
+// triggers{
+//    GenericTrigger(
+//       genericVariables: [
+//         [key: 'ref', value: '$.ref']
+//         ],
+//       causeString: 'Triggered on $ref',
+//       token: 'snyk_jira_GenericTrigger_token',
+//       printContributedVariables: true,
+//       printPostContent: true,
+//       silentResponse: false,
+//       regexpFilterText: '$ref',
+//       regexpFilterExpression: 'refs/heads/' + BRANCH_NAME
+//    )
+// }
+
+
+
+
+    stages {
         stage('static code scan') {
           steps {
             echo 'Testing...'
@@ -27,33 +46,41 @@ pipeline {
           }
         }
 
-        stage('Build') {
+        stage('upload report to Jira') {
             steps {
-                sh 'npm install'
-            }
-        }
-
-        stage('Vulnerability Scan') {
-            steps {
-            echo  'start snyk test...'
-            snykSecurity(
-              snykInstallation: 'snyk@manual',
-              // snykInstallation: 'snyk@latest',
-              snykTokenId: 'snyk-api-token-kk',
-              // place other optional parameters here, for example:
-            )
+               echo 'uploading report to Jira...'
+               sh 'ls -l | grep sarif'
             }
         }
 
 
 
+        // stage('Build') {
+        //     steps {
+        //         sh 'npm install'
+        //     }
+        // }
 
-        stage('Deliver') {
-            steps {
-                sh './jenkins/scripts/deliver.sh'
-                input message: 'Finished using the web site? (Click "Proceed" to continue)'
-                sh './jenkins/scripts/kill.sh'
-            }
-        }
+        // stage('Vulnerability Scan') {
+        //     steps {
+        //     echo  'start snyk test...'
+        //     snykSecurity(
+        //       snykInstallation: 'snyk@manual',
+        //       // snykInstallation: 'snyk@latest',
+        //       snykTokenId: 'snyk-api-token-kk',
+        //       // place other optional parameters here, for example:
+        //     )
+        //     }
+        // }
+
+
+        // stage('Deliver') {
+        //     steps {
+        //         sh './jenkins/scripts/deliver.sh'
+        //         input message: 'Finished using the web site? (Click "Proceed" to continue)'
+        //         sh './jenkins/scripts/kill.sh'
+        //     }
+        // }
+
     }
 }
