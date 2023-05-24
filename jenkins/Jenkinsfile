@@ -51,16 +51,16 @@ pipeline {
            script {
                comments_var = readFile('summary.html')
             }
-
+          echo "${comments_var}"
           }
         }
 
         stage('Update JIRA') {
             steps {
               script{
-               echo "${env.comments_var}"
+               echo "${comments_var}"
                withEnv(['JIRA_SITE=resolve']) {
-                def comment = [ body: "${env.comments_var}" ]
+                def comment = [ body: "${comments_var}" ]
                 jiraAddComment idOrKey: 'AUTO-3', input: comment
                 }
               }
