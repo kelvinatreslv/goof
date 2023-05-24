@@ -25,7 +25,7 @@ pipeline {
             // recordIssues  tool: sarif(name: 'Snyk Code', id: 'snyk-code', pattern: 'results-code.sarif')  
 
             sh '/opt/jenkins/tools/snyk/snyk-to-html-linux  -i results.json -o results.html'
-            sh 'echo "Details URL:  https://snyk-demo.reslv.local/results.html" >> summary.html'
+            sh 'echo "Details URL:  https://snyk.demo.reslv.one/results.html" >> summary.html'
            script {
                comments_var = readFile('summary.html')
             }
