@@ -4,7 +4,7 @@ pipeline {
     agent any
     tools {nodejs "nodejs-20.2.0"}
     parameters {
-            string(name: 'comments_var', defaultValue: '')
+            string(name: 'comments_var', defaultValue: '123')
         }
 
 // triggers{
