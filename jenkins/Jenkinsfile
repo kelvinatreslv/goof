@@ -34,7 +34,7 @@ pipeline {
             // sh snyk code test --json | snyk-to-html -o results.html
             // sh '/opt/jenkins/tools/snyk/snyk-linux code test --sarif-file-output=results-code.sarif'
             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                            sh '/opt/jenkins/tools/snyk/snyk-linux code test --json | /opt/jenkins/tools/snyk/snyk-to-html -o results.html'
+                            sh '/opt/jenkins/tools/snyk/snyk-linux code test --json | /opt/jenkins/tools/snyk/snyk-to-html-linux -o results.html'
                         }
             // recordIssues  tool: sarif(name: 'Snyk Code', id: 'snyk-code', pattern: 'results-code.sarif')
           }
