@@ -51,7 +51,7 @@ pipeline {
             // env.comments_var = COMMENTS
             // echo ${env.comments_var}
            script {
-               comments_var = readFile('summary2.html')
+               comments_var = readFile('summary.html')
             }
           echo "${comments_var}"
           }
