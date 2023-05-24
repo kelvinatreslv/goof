@@ -25,6 +25,7 @@ pipeline {
     stages {
         stage('Static code scan') {
           steps {
+            script{
             echo 'Testing...'
             sh 'pwd'
             sh 'ls -la'
@@ -46,7 +47,7 @@ pipeline {
             sh '/opt/jenkins/tools/snyk/snyk-to-html-linux  -i results-code.sarif -o results.html'
             sh 'COMMENTS=`cat results11.html | grep -A 20 -i "snyk code report"`'
             env.comments_var = $COMMENTS
-                          
+            }        
           }
         }
 
