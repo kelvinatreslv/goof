@@ -26,7 +26,6 @@ pipeline {
             echo 'Testing...'
             sh 'pwd'
             sh 'ls -la'
-            echo ${env.comments_var}
             echo 'Authorize Snyk CLI'
 
             withCredentials([string(credentialsId: 'SNYK_TOKEN_SECRET', variable: 'SNYK_TOKEN_SECRET')]) {
