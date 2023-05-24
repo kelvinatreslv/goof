@@ -42,7 +42,7 @@ pipeline {
                         }
             recordIssues  tool: sarif(name: 'Snyk Code', id: 'snyk-code', pattern: 'results-code.sarif')
             sh '/opt/jenkins/tools/snyk/snyk-to-html-linux  -i results-code.sarif -o results.html'
-            sh 'cat results.html | grep -A 20 -i "snyk code report" > summary.html'
+            sh 'cat results.html | grep -A 21 -i "<div class=\"header-wrap\">" > summary.html'
             sh 'ls -la'
             // echo $COMMENTS
             // COMMENTS= sh 'cat results.html | grep -A 20 -i "snyk code report"'
