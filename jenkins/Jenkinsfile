@@ -50,7 +50,7 @@ pipeline {
             steps {
               script{
                withEnv(['JIRA_SITE=resolve']) {
-                def comment = [ body: $COMMENTS ]
+                def comment = [ body: ${COMMENTS} ]
                 jiraAddComment idOrKey: 'AUTO-3', input: comment
                 }
               }
