@@ -42,11 +42,15 @@ pipeline {
                         }
             recordIssues  tool: sarif(name: 'Snyk Code', id: 'snyk-code', pattern: 'results-code.sarif')
             sh '/opt/jenkins/tools/snyk/snyk-to-html-linux  -i results-code.sarif -o results.html'
-            sh 'COMMENTS=`cat results.html | grep -A 20 -i "snyk code report"`'
+            sh 'cat results.html | grep -A 20 -i "snyk code report" > summary.html'
             // echo $COMMENTS
             // COMMENTS= sh 'cat results.html | grep -A 20 -i "snyk code report"'
             // env.comments_var = COMMENTS
-            // echo ${env.comments_var}    
+            // echo ${env.comments_var}
+           script {
+            comments_var = readFile('summary.html')
+           }
+
           }
         }
 
@@ -55,7 +59,7 @@ pipeline {
               script{
               //  echo ${env.comments_var}
                withEnv(['JIRA_SITE=resolve']) {
-                def comment = [ body: "1234" ]
+                def comment = [ body: ${env.comments_var} ]
                 jiraAddComment idOrKey: 'AUTO-3', input: comment
                 }
               }
