@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {nodejs "nodejs-20.2.0"}
-
+    def COMMENTS=''
 
 // triggers{
 //    GenericTrigger(
@@ -49,7 +49,7 @@ pipeline {
         stage('Update JIRA') {
             steps {
               script{
-               echo $COMMENTS
+               echo ${COMMENTS}
                withEnv(['JIRA_SITE=resolve']) {
                 def comment = [ body: ${COMMENTS} ]
                 jiraAddComment idOrKey: 'AUTO-3', input: comment
