@@ -38,14 +38,15 @@ pipeline {
             // /opt/jenkins/tools/snyk/snyk-linux code test | grep -A 3 'Summary:'
 
             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                            sh '/opt/jenkins/tools/snyk/snyk-linux code test --sarif-file-output=results-code.sarif'
+                            // sh '/opt/jenkins/tools/snyk/snyk-linux code test --sarif-file-output=results-code.sarif'
+                            sh '/opt/jenkins/tools/snyk/snyk-linux code test --json-file-output=result.json | tee | grep -A 3 -i "Summary:" > summary.html '
                         }
 
-            recordIssues  tool: sarif(name: 'Snyk Code', id: 'snyk-code', pattern: 'results-code.sarif') 
+            // recordIssues  tool: sarif(name: 'Snyk Code', id: 'snyk-code', pattern: 'results-code.sarif') 
 
-            sh '/opt/jenkins/tools/snyk/snyk-to-html-linux  -i results-code.sarif -o results.html'
-            sh 'cat results.html | grep -A 21 -i "<div class=\"header-wrap\">" > summary.html'            
-            sh 'ls -la'
+            sh '/opt/jenkins/tools/snyk/snyk-to-html-linux  -i results.json -o results.html'
+            // sh 'cat results.html | grep -A 21 -i "<div class=\"header-wrap\">" > summary.html'            
+            // sh 'ls -la'
             // echo $COMMENTS
             // COMMENTS= sh 'cat results.html | grep -A 20 -i "snyk code report"'
             // env.comments_var = COMMENTS
