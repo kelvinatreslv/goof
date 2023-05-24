@@ -41,7 +41,7 @@ pipeline {
             recordIssues  tool: sarif(name: 'Snyk Code', id: 'snyk-code', pattern: 'results-code.sarif')
             sh '/opt/jenkins/tools/snyk/snyk-to-html-linux  -i results-code.sarif -o results.html'
             sh 'COMMENTS=`cat results11.html | grep -A 20 -i "snyk code report"`'
-            echo $COMMENTS
+            
                           
           }
         }
@@ -49,6 +49,7 @@ pipeline {
         stage('Update JIRA') {
             steps {
               script{
+               echo $COMMENTS
                withEnv(['JIRA_SITE=resolve']) {
                 def comment = [ body: ${COMMENTS} ]
                 jiraAddComment idOrKey: 'AUTO-3', input: comment
