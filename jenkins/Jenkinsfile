@@ -4,22 +4,6 @@ pipeline {
     agent any
     tools {nodejs "nodejs-20.2.0"}
 
-
-// triggers{
-//    GenericTrigger(
-//       genericVariables: [
-//         [key: 'ref', value: '$.ref']
-//         ],
-//       causeString: 'Triggered on $ref',
-//       token: 'snyk_jira_GenericTrigger_token',
-//       printContributedVariables: true,
-//       printPostContent: true,
-//       silentResponse: false,
-//       regexpFilterText: '$ref',
-//       regexpFilterExpression: 'refs/heads/' + BRANCH_NAME
-//    )
-// }
-
     stages {
         stage('Static code scan') {
           steps {
@@ -33,26 +17,15 @@ pipeline {
             }
 
             echo 'start snyk code test...'
-            // sh snyk code test --json | snyk-to-html -o results.html
-            // sh '/opt/jenkins/tools/snyk/snyk-linux code test --json | /opt/jenkins/tools/snyk/snyk-to-html-linux -o results.html'
-            // /opt/jenkins/tools/snyk/snyk-linux code test | grep -A 3 'Summary:'
-
             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                             // sh '/opt/jenkins/tools/snyk/snyk-linux code test --sarif-file-output=results-code.sarif'
                             sh '/opt/jenkins/tools/snyk/snyk-linux code test --json-file-output=result.json | tee | grep -A 3 -i "Summary:" > summary.html '
                         }
 
-            // recordIssues  tool: sarif(name: 'Snyk Code', id: 'snyk-code', pattern: 'results-code.sarif') 
+            // recordIssues  tool: sarif(name: 'Snyk Code', id: 'snyk-code', pattern: 'results-code.sarif')  
 
             sh '/opt/jenkins/tools/snyk/snyk-to-html-linux  -i results.json -o results.html'
-            // sh 'cat results.html | grep -A 21 -i "<div class=\"header-wrap\">" > summary.html'            
-            // sh 'ls -la'
-            // echo $COMMENTS
-            // COMMENTS= sh 'cat results.html | grep -A 20 -i "snyk code report"'
-            // env.comments_var = COMMENTS
-            // echo ${env.comments_var}
-            sh 'cat summary.html'
-            sh 'echo "Details URL:  https://1231.asdadf.com/results.html" >> summary.html'
+            sh 'echo "Details URL:  https://snyk-demo.reslv.local/results.html" >> summary.html'
            script {
                comments_var = readFile('summary.html')
             }
@@ -63,7 +36,6 @@ pipeline {
         stage('Update JIRA') {
             steps {
               script{
-               echo "${comments_var}"
                withEnv(['JIRA_SITE=resolve']) {
                 def comment = [ body: "${comments_var}" ]
                 jiraAddComment idOrKey: 'AUTO-3', input: comment
