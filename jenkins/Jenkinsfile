@@ -23,7 +23,6 @@ pipeline {
     stages {
         stage('Static code scan') {
           steps {
-            script{
             echo 'Testing...'
             sh 'pwd'
             sh 'ls -la'
@@ -48,8 +47,7 @@ pipeline {
             echo $COMMENTS
             // COMMENTS= sh 'cat results.html | grep -A 20 -i "snyk code report"'
             // env.comments_var = COMMENTS
-            // echo ${env.comments_var}
-            }        
+            // echo ${env.comments_var}    
           }
         }
 
