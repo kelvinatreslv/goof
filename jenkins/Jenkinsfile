@@ -1,9 +1,11 @@
 
-def COMMENTS=''
+
 pipeline {
     agent any
     tools {nodejs "nodejs-20.2.0"}
-    
+    parameters {
+            string(name: 'comments', defaultValue: '')
+        }
 
 // triggers{
 //    GenericTrigger(
@@ -43,7 +45,7 @@ pipeline {
             recordIssues  tool: sarif(name: 'Snyk Code', id: 'snyk-code', pattern: 'results-code.sarif')
             sh '/opt/jenkins/tools/snyk/snyk-to-html-linux  -i results-code.sarif -o results.html'
             sh 'COMMENTS=`cat results11.html | grep -A 20 -i "snyk code report"`'
-            
+            env.comments_var = $COMMENTS
                           
           }
         }
@@ -51,9 +53,9 @@ pipeline {
         stage('Update JIRA') {
             steps {
               script{
-               echo ${COMMENTS}
+               echo ${env.comments_var}
                withEnv(['JIRA_SITE=resolve']) {
-                def comment = [ body: ${COMMENTS} ]
+                def comment = [ body: ${env.comments_var} ]
                 jiraAddComment idOrKey: 'AUTO-3', input: comment
                 }
               }
