@@ -23,7 +23,7 @@ pipeline {
     stages {
         stage('Static code scan') {
           steps {
-            echo ${comments_var}
+            echo "${comments_var}"
             echo 'Testing...'
             sh 'pwd'
             echo 'Authorize Snyk CLI'
