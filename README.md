@@ -64,7 +64,7 @@ Here are the exploitable vulnerable packages:
 * Cross-site Scripting (XSS)
 * Information exposure via Hardcoded values in code
 * Security misconfiguration exposes server information 
-* Insecure protocol (HTTP) communication 
+* Insecure protocol (HTTP) communication aa
 
 #### Code injection
 
